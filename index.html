@@ -139,17 +139,19 @@
     border:1px solid var(--line);
     background:#fff;
     border-radius:9px;
-    padding:5px 9px 6px;
+    padding:5px 10px 6px;
     cursor:pointer;
     text-align:center;
-    min-width:38px;
+    min-width:54px;
     transition:.15s;
   }
-  .day-chip .n{ font-size:13px; font-weight:700; color:var(--ink); line-height:1.1; }
-  .day-chip .w{ font-size:9px; color:var(--muted); text-transform:uppercase; letter-spacing:.04em; }
+  .day-chip .tag{ font-size:8.5px; font-weight:700; color:var(--accent); text-transform:uppercase; letter-spacing:.08em; line-height:1.2; margin-bottom:2px; white-space:nowrap; }
+  .day-chip .n{ font-size:13px; font-weight:700; color:var(--ink); line-height:1.1; white-space:nowrap; }
+  .day-chip .w{ font-size:9px; color:var(--muted); text-transform:uppercase; letter-spacing:.04em; margin-top:1px; }
   .day-chip:hover{ border-color:var(--accent); }
   .day-chip.active{ background:var(--ink); border-color:var(--ink); }
   .day-chip.active .n, .day-chip.active .w{ color:#fff; }
+  .day-chip.active .tag{ color:#d9c7a3; }
   .nav-btn.toggle-all{
     flex-shrink:0;
     margin-left:8px;
@@ -724,7 +726,7 @@ days.forEach((d,i)=>{
   const chip = document.createElement('button');
   chip.className = 'day-chip';
   chip.dataset.idx = i;
-  chip.innerHTML = `<div class="n">${i+1}</div><div class="w">${weekdayAbbr(d.day)}</div>`;
+  chip.innerHTML = `<div class="tag">Day ${i+1}</div><div class="n">${shortDate(d.date)}</div><div class="w">${weekdayAbbr(d.day)}</div>`;
   chip.title = d.day + ', ' + d.date + ' — ' + d.city;
   chip.addEventListener('click', ()=>{
     const target = document.getElementById('day-' + (i+1));
