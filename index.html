@@ -12,7 +12,9 @@
     --muted:#847e73;
     --line:#e6e1d6;
     --accent:#9c7a4f;
+    --radius:14px;
     --shadow:0 1px 2px rgba(20,15,5,.04), 0 10px 28px rgba(20,15,5,.05);
+    --shadow-hover:0 4px 10px rgba(20,15,5,.06), 0 16px 36px rgba(20,15,5,.08);
     color-scheme: light;
   }
   *{box-sizing:border-box;}
@@ -24,9 +26,11 @@
     padding-bottom:70px;
   }
   .serif{ font-family:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,"Times New Roman",serif; }
+  svg{ display:block; }
 
+  /* ---------- Header ---------- */
   header.top{
-    padding:48px 20px 26px;
+    padding:44px 20px 8px;
     text-align:center;
     border-bottom:1px solid var(--line);
     background:var(--card);
@@ -41,7 +45,7 @@
   }
   header.top h1{
     margin:0 0 16px;
-    font-size:40px;
+    font-size:38px;
     font-weight:500;
     letter-spacing:.01em;
     color:var(--ink);
@@ -53,64 +57,111 @@
     margin:0 auto 18px;
     opacity:.7;
   }
-  header.top p{
-    margin:3px 0;
-    color:var(--muted);
-    font-size:13.5px;
-    letter-spacing:.01em;
-  }
   header.top .dates{
     font-size:14px;
     letter-spacing:.08em;
     text-transform:uppercase;
     color:var(--ink);
     font-weight:600;
-    margin-bottom:8px;
+    margin-bottom:6px;
   }
-  .route-strip{
-    max-width:640px;
-    margin:16px auto 0;
-    padding:0 12px;
-    font-size:11.5px;
-    letter-spacing:.14em;
-    text-transform:uppercase;
+  header.top .sub{
+    margin:2px 0 22px;
     color:var(--muted);
-    line-height:2;
+    font-size:13.5px;
   }
-  .route-strip .sep{ color:var(--line); margin:0 8px; }
 
-  .controls{
+  /* ---------- Destination picker ---------- */
+  .picker{
+    max-width:960px;
+    margin:0 auto;
+    padding:2px 16px 26px;
+    display:flex;
+    gap:12px;
+    overflow-x:auto;
+    scroll-snap-type:x proximity;
+  }
+  .picker::-webkit-scrollbar{ height:0; }
+  .dest-card{
+    flex:0 0 132px;
+    scroll-snap-align:start;
+    border:1px solid var(--line);
+    border-radius:12px;
+    overflow:hidden;
+    background:var(--card);
+    cursor:pointer;
+    text-align:left;
+    transition:.15s;
+    box-shadow:var(--shadow);
+  }
+  .dest-card:hover{ transform:translateY(-2px); box-shadow:var(--shadow-hover); }
+  .dest-card .art{ width:100%; height:64px; display:block; }
+  .dest-card .info{ padding:9px 10px 11px; }
+  .dest-card .info .name{ font-size:12.5px; font-weight:700; color:var(--ink); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .dest-card .info .range{ font-size:10.5px; color:var(--muted); margin-top:2px; letter-spacing:.02em; }
+
+  /* ---------- Sticky controls ---------- */
+  .controls-wrap{
     position:sticky;
     top:0;
     z-index:20;
     background:rgba(246,244,239,.94);
     backdrop-filter:blur(6px);
-    padding:10px 16px;
     border-bottom:1px solid var(--line);
+  }
+  .progress-track{
+    height:2px;
+    background:var(--line);
+  }
+  .progress-fill{
+    height:100%;
+    background:var(--accent);
+    width:5%;
+    transition:width .25s ease;
+  }
+  .controls{
+    padding:9px 12px;
     display:flex;
     align-items:center;
-    gap:6px;
+    gap:4px;
+  }
+  .day-strip{
+    display:flex;
+    gap:4px;
     overflow-x:auto;
-    white-space:nowrap;
+    scroll-behavior:smooth;
+    flex:1;
+    padding:2px 2px;
   }
-  .controls::-webkit-scrollbar{ height:0; }
-  .nav-btn{
-    border:1px solid transparent;
-    background:transparent;
-    padding:6px 9px;
-    border-radius:6px;
-    font-size:12.5px;
-    cursor:pointer;
-    font-weight:600;
-    color:var(--muted);
-    transition:.15s;
-    flex-shrink:0;
-  }
-  .nav-btn:hover{ color:var(--ink); background:#efeadf; }
-  .nav-btn.toggle-all{
-    color:var(--ink);
+  .day-strip::-webkit-scrollbar{ height:0; }
+  .day-chip{
+    flex:0 0 auto;
     border:1px solid var(--line);
-    margin-right:8px;
+    background:#fff;
+    border-radius:9px;
+    padding:5px 9px 6px;
+    cursor:pointer;
+    text-align:center;
+    min-width:38px;
+    transition:.15s;
+  }
+  .day-chip .n{ font-size:13px; font-weight:700; color:var(--ink); line-height:1.1; }
+  .day-chip .w{ font-size:9px; color:var(--muted); text-transform:uppercase; letter-spacing:.04em; }
+  .day-chip:hover{ border-color:var(--accent); }
+  .day-chip.active{ background:var(--ink); border-color:var(--ink); }
+  .day-chip.active .n, .day-chip.active .w{ color:#fff; }
+  .nav-btn.toggle-all{
+    flex-shrink:0;
+    margin-left:8px;
+    border:1px solid var(--line);
+    background:#fff;
+    padding:7px 12px;
+    border-radius:9px;
+    font-size:12px;
+    font-weight:600;
+    color:var(--ink);
+    cursor:pointer;
+    white-space:nowrap;
   }
   .nav-btn.toggle-all:hover{ border-color:var(--accent); }
 
@@ -135,37 +186,54 @@
   .dot.planned{background:#3c6e56;}
   .dot.suggested{background:var(--accent);}
 
+  /* ---------- Day cards ---------- */
   .day-card{
     background:var(--card);
-    border-radius:10px;
+    border-radius:var(--radius);
     box-shadow:var(--shadow);
     border:1px solid var(--line);
-    margin-bottom:12px;
+    margin-bottom:14px;
     overflow:hidden;
+    scroll-margin-top:96px;
+    transition:box-shadow .2s;
+  }
+  .day-card:hover{ box-shadow:var(--shadow-hover); }
+  .banner{
+    width:100%;
+    height:84px;
+    display:block;
+    position:relative;
+    overflow:hidden;
+    line-height:0;
+  }
+  .banner svg{
+    width:100%;
+    height:100%;
+    display:block;
+  }
+  .banner .daytag{
+    position:absolute;
+    left:14px;
+    top:12px;
+    font-size:10.5px;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+    font-weight:700;
+    color:#fff;
+    background:rgba(0,0,0,.32);
+    padding:4px 9px;
+    border-radius:999px;
+    backdrop-filter:blur(2px);
   }
   .day-head{
-    padding:18px 20px;
+    padding:14px 20px 16px;
     cursor:pointer;
     display:flex;
     justify-content:space-between;
-    align-items:center;
+    align-items:flex-end;
     gap:14px;
   }
   .day-head:hover{background:#fbfaf7;}
-  .day-title .eyebrow-row{
-    display:flex;
-    align-items:center;
-    gap:7px;
-    font-size:11px;
-    letter-spacing:.14em;
-    text-transform:uppercase;
-    color:var(--muted);
-    font-weight:700;
-    margin-bottom:6px;
-  }
-  .day-title .eyebrow-row .city-dot{
-    width:7px; height:7px; border-radius:50%; flex-shrink:0;
-  }
   .day-title .d1{
     font-size:19px;
     font-weight:500;
@@ -176,6 +244,7 @@
     color:var(--muted);
     transition:transform .2s;
     flex-shrink:0;
+    margin-bottom:3px;
   }
   .day-card.open .chevron{transform:rotate(180deg);}
   .day-body{
@@ -200,7 +269,11 @@
     letter-spacing:.12em;
     color:var(--accent);
     font-weight:700;
+    display:flex;
+    align-items:center;
+    gap:6px;
   }
+  .section h4 svg{ width:14px; height:14px; color:var(--accent); flex-shrink:0; }
   .section p, .section li{
     font-size:14px;
     line-height:1.6;
@@ -209,6 +282,93 @@
   }
   ul.plain{margin:0; padding-left:18px;}
   ul.plain li{margin-bottom:5px;}
+
+  /* ---------- Schedule timeline ---------- */
+  .timeline{ position:relative; padding-left:20px; }
+  .timeline::before{
+    content:'';
+    position:absolute;
+    left:5px; top:5px; bottom:5px;
+    width:1.5px;
+    background:var(--line);
+  }
+  .tl-step{
+    position:relative;
+    margin-bottom:12px;
+    font-size:14px;
+    line-height:1.55;
+    color:#33322e;
+  }
+  .tl-step:last-child{ margin-bottom:0; }
+  .tl-step::before{
+    content:'';
+    position:absolute;
+    left:-20px; top:5px;
+    width:8px; height:8px;
+    border-radius:50%;
+    background:var(--accent);
+    border:2px solid var(--card);
+    box-shadow:0 0 0 1px var(--line);
+  }
+  .tl-leg{
+    position:relative;
+    margin-bottom:14px;
+    background:#faf8f4;
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:11px 13px 12px;
+  }
+  .tl-leg::before{
+    content:'';
+    position:absolute;
+    left:-20px; top:16px;
+    width:9px; height:9px;
+    border-radius:50%;
+    background:var(--ink);
+    border:2px solid var(--card);
+    box-shadow:0 0 0 1px var(--line);
+  }
+  .tl-leg-badge{
+    display:flex;
+    align-items:center;
+    gap:6px;
+    font-size:11.5px;
+    font-weight:700;
+    color:var(--ink);
+    margin-bottom:9px;
+    letter-spacing:.01em;
+  }
+  .tl-leg-badge svg{ width:14px; height:14px; color:var(--accent); flex-shrink:0; }
+  .tl-leg-badge .op{ color:var(--muted); font-weight:500; }
+  .tl-leg-route{
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+  .tl-leg-point{ flex:0 0 auto; min-width:52px; }
+  .tl-leg-point.right{ text-align:right; }
+  .tl-leg-point b{ display:block; font-size:15px; color:var(--ink); }
+  .tl-leg-point span{ display:block; font-size:11px; color:var(--muted); letter-spacing:.03em; text-transform:uppercase; margin-top:1px; }
+  .tl-leg-line{
+    flex:1;
+    position:relative;
+    height:1px;
+    background:var(--line);
+    margin-top:-14px;
+  }
+  .tl-leg-duration{
+    position:absolute;
+    left:50%;
+    top:-9px;
+    transform:translateX(-50%);
+    background:#faf8f4;
+    padding:0 6px;
+    font-size:10px;
+    color:var(--muted);
+    white-space:nowrap;
+  }
+  .tl-leg-note{ font-size:12px; color:var(--muted); margin-top:9px; font-style:italic; }
+  .tl-leg-aircraft{ font-size:11.5px; color:var(--muted); margin-top:8px; }
 
   .todo-item{
     display:flex;
@@ -237,9 +397,11 @@
   }
 
   @media (max-width:480px){
-    header.top{padding:36px 16px 22px;}
-    header.top h1{font-size:30px;}
-    .route-strip{font-size:10.5px; letter-spacing:.1em;}
+    header.top{padding:34px 16px 6px;}
+    header.top h1{font-size:28px;}
+    .dest-card{ flex-basis:112px; }
+    .dest-card .art{ height:54px; }
+    .banner{ height:70px; }
   }
 </style>
 </head>
@@ -250,11 +412,18 @@
   <h1 class="serif">Europe Summer 2026</h1>
   <div class="rule"></div>
   <p class="dates">23 July — 11 August</p>
-  <p>Tap any day to expand. Suggested activities are researched add‑ons, not confirmed bookings.</p>
-  <div class="route-strip" id="routeStrip"></div>
+  <p class="sub">Tap a destination to jump there, or scroll day by day below.</p>
 </header>
 
-<div class="controls" id="dayNav"></div>
+<div class="picker" id="picker"></div>
+
+<div class="controls-wrap">
+  <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+  <div class="controls">
+    <div class="day-strip" id="dayStrip"></div>
+    <button class="nav-btn toggle-all" id="toggleAllBtn">Collapse all</button>
+  </div>
+</div>
 
 <main>
   <div class="legend">
@@ -278,9 +447,30 @@ const CITY_COLORS = {
   "Sydney": "#6f6a63"
 };
 
+const CITY_ART = {
+"Transit": `<svg viewBox="0 0 240 100" xmlns="http://www.w3.org/2000/svg"><rect width="240" height="100" fill="#f0efed"/><g fill="none" stroke="#9b9690" stroke-width="2" stroke-linecap="round" opacity="0.55"><path d="M40 60 q10 -8 20 0"/><path d="M168 38 q10 -8 20 0"/><path d="M68 76 q12 -9 24 0"/></g><path d="M60 45 L150 50 L175 44 L180 48 L155 58 L120 58 L95 68 L82 66 L100 54 L60 52 Z" fill="#9b9690"/></svg>`,
+"Berlin": `<svg viewBox="0 0 240 100" xmlns="http://www.w3.org/2000/svg"><rect width="240" height="100" fill="#f5e8e6"/><g fill="none" stroke="#a24a3f" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="20" y1="80" x2="220" y2="80"/><rect x="60" y="35" width="8" height="45" fill="#a24a3f" stroke="none"/><rect x="80" y="35" width="8" height="45" fill="#a24a3f" stroke="none"/><rect x="100" y="35" width="8" height="45" fill="#a24a3f" stroke="none"/><rect x="120" y="35" width="8" height="45" fill="#a24a3f" stroke="none"/><rect x="140" y="35" width="8" height="45" fill="#a24a3f" stroke="none"/><rect x="160" y="35" width="8" height="45" fill="#a24a3f" stroke="none"/><line x1="55" y1="35" x2="175" y2="35"/><path d="M100 35 L115 20 L130 35"/><rect x="112" y="12" width="16" height="8" fill="#a24a3f" stroke="none"/></g></svg>`,
+"Brussels": `<svg viewBox="0 0 240 100" xmlns="http://www.w3.org/2000/svg"><rect width="240" height="100" fill="#f6efe1"/><g stroke="#a98444" stroke-width="3" fill="none" stroke-linecap="round"><line x1="20" y1="88" x2="220" y2="88"/><line x1="120" y1="50" x2="80" y2="20"/><line x1="120" y1="50" x2="160" y2="20"/><line x1="120" y1="50" x2="120" y2="88"/><line x1="120" y1="50" x2="70" y2="75"/><line x1="120" y1="50" x2="170" y2="75"/></g><g fill="#a98444"><circle cx="120" cy="50" r="10"/><circle cx="80" cy="20" r="8"/><circle cx="160" cy="20" r="8"/><circle cx="70" cy="75" r="8"/><circle cx="170" cy="75" r="8"/><circle cx="120" cy="88" r="7"/></g></svg>`,
+"Amsterdam": `<svg viewBox="0 0 240 100" xmlns="http://www.w3.org/2000/svg"><rect width="240" height="100" fill="#f4e6ec"/><g fill="#98466a"><path d="M20 88 V55 H45 V88 Z"/><path d="M45 88 V45 L57 32 L69 45 V88 Z"/><path d="M69 88 V50 H97 V88 Z"/><path d="M97 88 V40 L109 28 L121 40 V88 Z"/><path d="M121 88 V58 H150 V88 Z"/><path d="M150 88 V42 L164 30 L178 42 V88 Z"/><path d="M178 88 V52 H205 V88 Z"/></g><line x1="15" y1="88" x2="215" y2="88" stroke="#98466a" stroke-width="3"/></svg>`,
+"Antibes": `<svg viewBox="0 0 240 100" xmlns="http://www.w3.org/2000/svg"><rect width="240" height="100" fill="#e3eeed"/><polyline points="10,50 40,25 70,45 100,20 130,42 160,30 190,48" fill="none" stroke="#3f7d78" stroke-width="2" opacity="0.5"/><line x1="15" y1="80" x2="225" y2="80" stroke="#3f7d78" stroke-width="3"/><g fill="#3f7d78"><rect x="140" y="62" width="70" height="18"/><rect x="140" y="54" width="8" height="8"/><rect x="155" y="54" width="8" height="8"/><rect x="170" y="54" width="8" height="8"/><rect x="185" y="54" width="8" height="8"/><rect x="200" y="54" width="8" height="8"/><path d="M45 80 L45 58 L62 80 Z"/></g><line x1="45" y1="80" x2="45" y2="55" stroke="#3f7d78" stroke-width="2"/></svg>`,
+"Cassis": `<svg viewBox="0 0 240 100" xmlns="http://www.w3.org/2000/svg"><rect width="240" height="100" fill="#e3e9ee"/><g fill="#3f5f7d"><path d="M0 90 L30 40 L55 65 L80 20 L110 90 Z"/><path d="M120 90 L150 35 L175 60 L200 15 L240 90 Z" opacity="0.85"/><path d="M95 90 L95 75 L112 90 Z"/></g><line x1="0" y1="90" x2="240" y2="90" stroke="#3f5f7d" stroke-width="2" opacity="0.4"/><line x1="95" y1="90" x2="95" y2="73" stroke="#3f5f7d" stroke-width="2"/></svg>`,
+"Paris": `<svg viewBox="0 0 240 100" xmlns="http://www.w3.org/2000/svg"><rect width="240" height="100" fill="#ece9f2"/><g fill="none" stroke="#6a5a8c" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M120 10 L100 85 M120 10 L140 85"/><path d="M108 45 L132 45"/><path d="M104 60 L136 60"/><path d="M95 85 L145 85"/><path d="M100 85 L90 95 M140 85 L150 95"/></g><line x1="20" y1="95" x2="220" y2="95" stroke="#6a5a8c" stroke-width="2" opacity="0.4"/></svg>`,
+"Ho Chi Minh City": `<svg viewBox="0 0 240 100" xmlns="http://www.w3.org/2000/svg"><rect width="240" height="100" fill="#e8efe6"/><g fill="#4f7a45"><rect x="30" y="55" width="24" height="35"/><rect x="60" y="40" width="20" height="50"/><rect x="95" y="20" width="26" height="70"/><path d="M121 45 L145 38 L145 48 L121 55 Z"/><rect x="130" y="55" width="18" height="35"/><rect x="155" y="45" width="20" height="45"/><rect x="182" y="60" width="22" height="30"/></g><line x1="15" y1="90" x2="225" y2="90" stroke="#4f7a45" stroke-width="2" opacity="0.4"/></svg>`,
+"Sydney": `<svg viewBox="0 0 240 100" xmlns="http://www.w3.org/2000/svg"><rect width="240" height="100" fill="#efeeec"/><path d="M30 90 Q120 20 210 90" fill="none" stroke="#6f6a63" stroke-width="3" opacity="0.5"/><g fill="#6f6a63"><path d="M110 90 Q118 55 135 90 Z"/><path d="M125 90 Q135 50 155 90 Z"/><path d="M145 90 Q157 58 170 90 Z"/></g><line x1="20" y1="90" x2="220" y2="90" stroke="#6f6a63" stroke-width="2" opacity="0.4"/></svg>`
+};
+
+const ICONS = {
+  route: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="19" r="2"/><circle cx="18" cy="5" r="2"/><path d="M8 19h7a4 4 0 0 0 4-4v-1a4 4 0 0 0-4-4H9a4 4 0 0 1-4-4v-1"/></svg>`,
+  bed: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 19v-6a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v6"/><path d="M3 19h18"/><path d="M7 11V8a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v3"/></svg>`,
+  ticket: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v2a2 2 0 0 0 0 4v2a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-2a2 2 0 0 0 0-4Z"/><path d="M13 6v3M13 15v3"/></svg>`,
+  pin: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s7-7.5 7-12a7 7 0 1 0-14 0c0 4.5 7 12 7 12Z"/><circle cx="12" cy="10" r="2.5"/></svg>`,
+  plane: `<svg viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M21 16v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0V9l-8 5v2l8-2.5V19l-3 2v1.5l4.5-1.5 4.5 1.5V21l-3-2v-5.5Z"/></svg>`,
+  train: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="14" rx="4"/><path d="M5 12h14"/><circle cx="9" cy="16.5" r="0.6" fill="currentColor"/><circle cx="15" cy="16.5" r="0.6" fill="currentColor"/><path d="M8 21l-2 2M16 21l2 2"/></svg>`
+};
+
 const days = [
 {day:"Thursday", date:"July 23", city:"Transit", start:"Sydney", end:"In Transit",
-  activities:["VA1 — Sydney to Doha","Depart SYD 2:50pm · Arrive DOH 10:40pm"],
+  activities:[{type:'flight', code:'VA1', airline:'Virgin Australia', op:'operated by Qatar Airways · Boeing 777-300ER', from:{code:'SYD',time:'2:50pm'}, to:{code:'DOH',time:'10:40pm'}, duration:'14h 50m'}],
   stay:"N/A",
   tickets:["Virgin Confirmation #FOVOTI", "Qatar Confirmation #F2DDK8"],
   planned:[], suggested:[
@@ -288,7 +478,7 @@ const days = [
   ]},
 
 {day:"Friday", date:"July 24", city:"Berlin", start:"In Transit", end:"Berlin",
-  activities:["VA6195 — Doha to Berlin","Depart DOH 2:25am · Arrive BER 7:25am"],
+  activities:[{type:'flight', code:'VA6195', airline:'Virgin Australia', op:'operated by Qatar Airways', from:{code:'DOH',time:'2:25am'}, to:{code:'BER',time:'7:25am'}, duration:'~6h'}],
   stay:"Airbnb — Hermannstraße 254, 12049 Berlin, Apartment 5 (see Guest Portal)",
   tickets:[],
   planned:[], suggested:[
@@ -317,7 +507,7 @@ const days = [
   ]},
 
 {day:"Monday", date:"July 27", city:"Brussels", start:"Berlin", end:"Brussels",
-  activities:["Checkout Airbnb at 9:30am","Uber to Berlin Airport (30 mins)","SN2582 — Berlin to Brussels · Depart BER 11:40 · Arrive BRU 13:05","Lunch in Brussels","Check‑in Airbnb at 3:00pm"],
+  activities:["Checkout Airbnb at 9:30am","Uber to Berlin Airport (30 mins)",{type:'flight', code:'SN2582', airline:'Brussels Airlines', op:'Airbus A320', from:{code:'BER',time:'11:40'}, to:{code:'BRU',time:'13:05'}, duration:'1h 25m'},"Lunch in Brussels","Check‑in Airbnb at 3:00pm"],
   stay:"Airbnb — Rue du Couloir, Ixelles, Bruxelles 1050",
   tickets:["Brussels Airlines Conf #8XZSJV"],
   planned:[], suggested:[
@@ -349,7 +539,7 @@ const days = [
   ]},
 
 {day:"Thursday", date:"July 30", city:"Amsterdam", start:"Brussels", end:"Amsterdam",
-  activities:["Checkout Airbnb at 11:00am","Train: Bruxelles‑Midi to Amsterdam Zuid · Depart 11:49 · Arrive 13:54","Check‑in Hotel at 15:00"],
+  activities:["Checkout Airbnb at 11:00am",{type:'train', code:null, airline:'Direct train', op:'Trainline · PNR CNNWGFM', from:{code:'Bruxelles‑Midi',time:'11:49'}, to:{code:'Amsterdam Zuid',time:'13:54'}, duration:'2h 5m'},"Check‑in Hotel at 15:00"],
   stay:"NYX Hotel Amsterdam Rembrandt Square — Amstel 144, Amsterdam 1017 AE, Netherlands",
   tickets:["Trainline booking ref 964527071368", "PNR CNNWGFM"],
   planned:[], suggested:[
@@ -384,7 +574,7 @@ const days = [
   ]},
 
 {day:"Monday", date:"August 3", city:"Antibes", start:"Amsterdam", end:"Antibes",
-  activities:["EJU7957 — Amsterdam to Nice · Depart AMS 13:30 · Arrive NCE 15:35","Pickup rental car @ Europcar (Conf #1201400369)","Drive to Antibes (35 mins)","Explore Antibes Old Town & Dinner"],
+  activities:[{type:'flight', code:'EJU7957', airline:'easyJet', op:'Airbus A320‑family', from:{code:'AMS',time:'13:30'}, to:{code:'NCE',time:'15:35'}, duration:'2h 5m'},"Pickup rental car @ Europcar (Conf #1201400369)","Drive to Antibes (35 mins)","Explore Antibes Old Town & Dinner"],
   stay:"Airbnb — 9 Avenue Mirabeau, Antibes, Provence‑Alpes‑Côte d'Azur 06600",
   tickets:["easyJet Booking Ref #KCH3FJ8", "Europcar Conf #1201400369"],
   planned:["Aperitivo @ Bocca Mar"],
@@ -431,7 +621,7 @@ const days = [
   ]},
 
 {day:"Saturday", date:"August 8", city:"Paris", start:"Cassis", end:"Paris",
-  activities:["Return rental car at Marseille St Charles Railway Station","Train: Marseille‑Saint‑Charles to Paris Gare de Lyon · Depart 12:03 · Arrive 15:22","Check‑in Paris hotel at 16:00","Dinner in Le Marais"],
+  activities:["Return rental car at Marseille St Charles Railway Station",{type:'train', code:'TGV', airline:'SNCF TGV', op:'Ref #296F3P', from:{code:'Marseille St‑Charles',time:'12:03'}, to:{code:'Paris Gare de Lyon',time:'15:22'}, duration:'3h 19m'},"Check‑in Paris hotel at 16:00","Dinner in Le Marais"],
   stay:"Hôtel des Grands Voyageurs — 34 Rue de l'Abbé Grégoire, 75006 Paris, France",
   tickets:["Train: SNCF Ref #296F3P"],
   planned:[], suggested:[
@@ -440,7 +630,7 @@ const days = [
   ]},
 
 {day:"Sunday", date:"August 9", city:"Ho Chi Minh City", start:"Paris", end:"Ho Chi Minh",
-  activities:["Checkout hotel at 8:20am","Travel to CDG Airport (~1 hr)","VN10 — CDG to SGN · Depart CDG 11:35"],
+  activities:["Checkout hotel at 8:20am","Travel to CDG Airport (~1 hr)",{type:'flight', code:'VN10', airline:'Vietnam Airlines', op:'Airbus A350‑900', from:{code:'CDG',time:'11:35'}, to:{code:'SGN',time:null}, duration:'12h 15m', note:'Overnight flight — lands Day 19, 04:50 (+1)'}],
   stay:"N/A",
   tickets:["[merged] Delta Confirmation #F6V6NQ", "Vietnam Airlines #C22OON"],
   planned:[], suggested:[
@@ -448,7 +638,7 @@ const days = [
   ]},
 
 {day:"Monday", date:"August 10", city:"Ho Chi Minh City", start:"Ho Chi Minh", end:"In Transit",
-  activities:["VN10 — arrives SGN 04:50 (+1)","Explore Ho Chi Minh City (~16 hrs)","VN773 — SGN to SYD · Depart SGN 20:45"],
+  activities:[{type:'flight', code:'VN10', airline:'Vietnam Airlines', op:'Airbus A350‑900', from:{code:'CDG',time:null}, to:{code:'SGN',time:'04:50 (+1)'}, note:'Landed overnight from Paris'},"Explore Ho Chi Minh City (~16 hrs)",{type:'flight', code:'VN773', airline:'Vietnam Airlines', op:'Airbus A350‑900', from:{code:'SGN',time:'20:45'}, to:{code:'SYD',time:null}, duration:'8h 30m', note:'Overnight flight — lands Day 20, 08:15 (+1)'}],
   stay:"N/A",
   tickets:["[merged] Delta Confirmation #F6V6NQ", "Vietnam Airlines #C22OON"],
   planned:[], suggested:[
@@ -461,7 +651,7 @@ const days = [
   ]},
 
 {day:"Tuesday", date:"August 11", city:"Sydney", start:"In Transit", end:"Sydney",
-  activities:["VN773 — arrives SYD 08:15 (+1)"],
+  activities:[{type:'flight', code:'VN773', airline:'Vietnam Airlines', op:'Airbus A350‑900', from:{code:'SGN',time:null}, to:{code:'SYD',time:'08:15 (+1)'}, note:'Landed from Ho Chi Minh City — welcome home'}],
   stay:"N/A",
   tickets:[],
   planned:[], suggested:[
@@ -474,62 +664,106 @@ function esc(s){
   d.innerText=s;
   return d.innerHTML;
 }
-
 function cityColor(c){ return CITY_COLORS[c] || "#9c7a4f"; }
+function cityArt(c){ return CITY_ART[c] || CITY_ART["Transit"]; }
+function shortDate(s){ return s.replace('January','Jan').replace('February','Feb').replace('March','Mar').replace('April','Apr').replace('May','May').replace('June','Jun').replace('July','Jul').replace('August','Aug').replace('September','Sep').replace('October','Oct').replace('November','Nov').replace('December','Dec'); }
+function weekdayAbbr(w){ return w.slice(0,3); }
 
-// Day quick-nav (jump straight to any day, in chronological order) + expand/collapse all
-const dayNav = document.getElementById('dayNav');
-const expandAllBtn = document.createElement('button');
-expandAllBtn.className = 'nav-btn toggle-all';
-expandAllBtn.textContent = 'Collapse all';
-let allOpen = true;
-expandAllBtn.addEventListener('click', ()=>{
-  allOpen = !allOpen;
-  expandAllBtn.textContent = allOpen ? 'Collapse all' : 'Expand all';
-  document.querySelectorAll('.day-card').forEach(card=>{
-    card.classList.toggle('open', allOpen);
-  });
-});
-dayNav.appendChild(expandAllBtn);
+function renderLeg(leg){
+  const icon = leg.type === 'train' ? ICONS.train : ICONS.plane;
+  const codeLabel = leg.code ? esc(leg.code) + ' · ' : '';
+  const opLabel = leg.op ? `<span class="op">— ${esc(leg.op)}</span>` : '';
+  const fromPoint = leg.from && leg.from.time
+    ? `<div class="tl-leg-point"><b>${esc(leg.from.time)}</b><span>${esc(leg.from.code)}</span></div>`
+    : `<div class="tl-leg-point"><b>—</b><span>${leg.from ? esc(leg.from.code) : ''}</span></div>`;
+  const toPoint = leg.to && leg.to.time
+    ? `<div class="tl-leg-point right"><b>${esc(leg.to.time)}</b><span>${esc(leg.to.code)}</span></div>`
+    : `<div class="tl-leg-point right"><b>—</b><span>${leg.to ? esc(leg.to.code) : ''}</span></div>`;
+  const durationTag = leg.duration ? `<span class="tl-leg-duration">${esc(leg.duration)}</span>` : '';
+  const note = leg.note ? `<div class="tl-leg-note">${esc(leg.note)}</div>` : '';
+  return `<div class="tl-leg">
+    <div class="tl-leg-badge">${icon}${codeLabel}${esc(leg.airline)} ${opLabel}</div>
+    <div class="tl-leg-route">
+      ${fromPoint}
+      <div class="tl-leg-line">${durationTag}</div>
+      ${toPoint}
+    </div>
+    ${note}
+  </div>`;
+}
 
+/* ---------- Destination picker (grouped consecutive city blocks) ---------- */
+const blocks = [];
 days.forEach((d,i)=>{
-  const btn = document.createElement('button');
-  btn.className = 'nav-btn';
-  btn.textContent = (i+1);
-  btn.title = d.day + ', ' + d.date + ' — ' + d.city;
-  btn.addEventListener('click', ()=>{
+  const last = blocks[blocks.length-1];
+  if(last && last.city === d.city){ last.endIdx = i; }
+  else { blocks.push({city:d.city, startIdx:i, endIdx:i}); }
+});
+const picker = document.getElementById('picker');
+blocks.forEach(b=>{
+  const startDate = shortDate(days[b.startIdx].date);
+  const endDate = shortDate(days[b.endIdx].date);
+  const range = startDate === endDate ? startDate : (startDate + '–' + endDate);
+  const card = document.createElement('button');
+  card.className = 'dest-card';
+  card.innerHTML = `<span class="art">${cityArt(b.city)}</span><div class="info"><div class="name">${esc(b.city)}</div><div class="range">${esc(range)}</div></div>`;
+  card.addEventListener('click', ()=>{
+    const target = document.getElementById('day-' + (b.startIdx+1));
+    if(target){
+      target.classList.add('open');
+      target.scrollIntoView({behavior:'smooth', block:'start'});
+    }
+  });
+  picker.appendChild(card);
+});
+
+/* ---------- Day strip nav + collapse toggle ---------- */
+const dayStrip = document.getElementById('dayStrip');
+const chips = [];
+days.forEach((d,i)=>{
+  const chip = document.createElement('button');
+  chip.className = 'day-chip';
+  chip.dataset.idx = i;
+  chip.innerHTML = `<div class="n">${i+1}</div><div class="w">${weekdayAbbr(d.day)}</div>`;
+  chip.title = d.day + ', ' + d.date + ' — ' + d.city;
+  chip.addEventListener('click', ()=>{
     const target = document.getElementById('day-' + (i+1));
     if(target){
       target.classList.add('open');
       target.scrollIntoView({behavior:'smooth', block:'start'});
     }
   });
-  dayNav.appendChild(btn);
+  dayStrip.appendChild(chip);
+  chips.push(chip);
 });
 
-// Route strip — plain editorial list of cities in order
-const routeStrip = document.getElementById('routeStrip');
-const uniqueCities = [];
-days.forEach(d=>{ if(uniqueCities[uniqueCities.length-1] !== d.city) uniqueCities.push(d.city); });
-routeStrip.innerHTML = uniqueCities.map(esc).join('<span class="sep">·</span>');
+const toggleAllBtn = document.getElementById('toggleAllBtn');
+let allOpen = true;
+toggleAllBtn.addEventListener('click', ()=>{
+  allOpen = !allOpen;
+  toggleAllBtn.textContent = allOpen ? 'Collapse all' : 'Expand all';
+  document.querySelectorAll('.day-card').forEach(card=>{
+    card.classList.toggle('open', allOpen);
+  });
+});
 
-// Build day cards
+/* ---------- Build day cards ---------- */
 const container = document.getElementById('days');
 days.forEach((d, idx)=>{
   const card = document.createElement('div');
   card.className = 'day-card';
   card.id = 'day-' + (idx+1);
   card.dataset.city = d.city;
+  card.dataset.idx = idx;
 
-  const dayNum = String(idx+1).padStart(2,'0');
+  const banner = document.createElement('div');
+  banner.className = 'banner';
+  banner.innerHTML = cityArt(d.city) + `<span class="daytag">Day ${idx+1} · ${esc(d.city)}</span>`;
+
   const head = document.createElement('div');
   head.className = 'day-head';
   head.innerHTML = `
     <div class="day-title">
-      <div class="eyebrow-row">
-        <span class="city-dot" style="background:${cityColor(d.city)}"></span>
-        <span>Day ${dayNum} — ${esc(d.city)}</span>
-      </div>
       <div class="d1 serif">${esc(d.day)}, ${esc(d.date)}</div>
       <div class="d2">${esc(d.start)} ${d.start!==d.end? '→ '+esc(d.end):''}</div>
     </div>
@@ -542,21 +776,27 @@ days.forEach((d, idx)=>{
   let html = '';
 
   if(d.activities.length){
-    html += `<div class="section"><h4>Schedule</h4><ul class="plain">`;
-    d.activities.forEach(a=> html += `<li>${esc(a)}</li>`);
-    html += `</ul></div>`;
+    html += `<div class="section"><h4>${ICONS.route}Schedule</h4><div class="timeline">`;
+    d.activities.forEach(a=>{
+      if(typeof a === 'object' && a && a.type){
+        html += renderLeg(a);
+      } else {
+        html += `<div class="tl-step">${esc(a)}</div>`;
+      }
+    });
+    html += `</div></div>`;
   }
 
-  html += `<div class="section"><h4>Accommodation</h4><p>${esc(d.stay)}</p></div>`;
+  html += `<div class="section"><h4>${ICONS.bed}Accommodation</h4><p>${esc(d.stay)}</p></div>`;
 
   if(d.tickets.length){
-    html += `<div class="section"><h4>Tickets &amp; Bookings</h4><ul class="plain">`;
+    html += `<div class="section"><h4>${ICONS.ticket}Tickets &amp; Bookings</h4><ul class="plain">`;
     d.tickets.forEach(t=> html += `<li>${esc(t)}</li>`);
     html += `</ul></div>`;
   }
 
   if(d.planned.length || d.suggested.length){
-    html += `<div class="section"><h4>Things to Do</h4>`;
+    html += `<div class="section"><h4>${ICONS.pin}Things to Do</h4>`;
     d.planned.forEach(p=>{
       html += `<div class="todo-item"><span class="dot planned"></span><div>${esc(p)}</div></div>`;
     });
@@ -570,12 +810,38 @@ days.forEach((d, idx)=>{
 
   body.innerHTML = html;
 
+  card.appendChild(banner);
   card.appendChild(head);
   card.appendChild(body);
   container.appendChild(card);
 
   card.classList.add('open');
 });
+
+/* ---------- Scrollspy: highlight active day chip + progress bar ---------- */
+const progressFill = document.getElementById('progressFill');
+let currentActive = 0;
+function setActive(idx){
+  if(idx === currentActive) return;
+  currentActive = idx;
+  chips.forEach((c,i)=> c.classList.toggle('active', i===idx));
+  progressFill.style.width = (((idx+1)/days.length)*100) + '%';
+  const activeChip = chips[idx];
+  if(activeChip){
+    const target = activeChip.offsetLeft - (dayStrip.clientWidth/2) + (activeChip.clientWidth/2);
+    dayStrip.scrollTo({left: Math.max(0,target), behavior:'smooth'});
+  }
+}
+const cards = Array.from(document.querySelectorAll('.day-card'));
+const observer = new IntersectionObserver((entries)=>{
+  entries.forEach(entry=>{
+    if(entry.isIntersecting){
+      setActive(parseInt(entry.target.dataset.idx,10));
+    }
+  });
+}, { rootMargin: '-15% 0px -70% 0px', threshold: 0 });
+cards.forEach(c=>observer.observe(c));
+setActive(0);
 </script>
 </body>
 </html>
