@@ -507,6 +507,22 @@
     white-space:nowrap;
   }
   .tl-leg-note{ font-size:12px; color:var(--muted); margin-top:9px; font-style:italic; }
+  .tl-leg-track{
+    display:inline-flex;
+    align-items:center;
+    gap:5px;
+    margin-top:10px;
+    font-size:11.5px;
+    font-weight:600;
+    color:var(--accent-text);
+    background:#fff;
+    border:1px solid #ddd0b8;
+    border-radius:7px;
+    padding:5px 10px;
+    text-decoration:none;
+  }
+  .tl-leg-track:hover{ border-color:var(--accent); background:#fdf9f0; }
+  .tl-leg-track svg{ width:12px; height:12px; }
 
   .todo-item{
     display:flex;
@@ -615,12 +631,13 @@ const ICONS = {
   copy: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v1"/></svg>`,
   check: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>`,
   alert: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4M12 17h.01"/><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/></svg>`,
-  ext: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><path d="M15 3h6v6"/><path d="M10 14 21 3"/></svg>`
+  ext: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><path d="M15 3h6v6"/><path d="M10 14 21 3"/></svg>`,
+  radar: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 12 20 7"/><path d="M12 3a9 9 0 1 0 9 9"/><path d="M12 7a5 5 0 1 0 5 5"/><circle cx="12" cy="12" r="1.2" fill="currentColor" stroke="none"/></svg>`
 };
 
 const days = [
 {day:"Thursday", date:"July 23", city:"Transit", start:"Sydney", end:"In Transit",
-  activities:[{type:'flight', code:'VA1', airline:'Virgin Australia', op:'operated by Qatar Airways · Boeing 777-300ER', from:{code:'SYD',time:'2:50pm'}, to:{code:'DOH',time:'10:40pm'}, duration:'14h 50m'}],
+  activities:[{type:'flight', code:'VOZ1', airline:'Virgin Australia', op:'operated by Qatar Airways · Boeing 777-300ER', from:{code:'SYD',time:'2:50pm'}, to:{code:'DOH',time:'10:40pm'}, duration:'14h 50m'}],
   stay:"N/A",
   tickets:["Virgin Confirmation #FOVOTI", "Qatar Confirmation #F2DDK8"],
   planned:[], suggested:[
@@ -628,7 +645,7 @@ const days = [
   ]},
 
 {day:"Friday", date:"July 24", city:"Berlin", start:"In Transit", end:"Berlin",
-  activities:[{type:'flight', code:'VA6195', airline:'Virgin Australia', op:'operated by Qatar Airways', from:{code:'DOH',time:'2:25am'}, to:{code:'BER',time:'7:25am'}, duration:'~6h'}],
+  activities:[{type:'flight', code:'VOZ6195', airline:'Virgin Australia', op:'operated by Qatar Airways', from:{code:'DOH',time:'2:25am'}, to:{code:'BER',time:'7:25am'}, duration:'~6h'}],
   stay:"Airbnb — Hermannstraße 254, 12049 Berlin, Apartment 5 (see Guest Portal)",
   tickets:[],
   planned:[], suggested:[
@@ -660,10 +677,9 @@ const days = [
   activities:["Checkout Airbnb at 9:30am","Uber to Berlin Airport (30 mins)",{type:'flight', code:'SN2582', airline:'Brussels Airlines', op:'Airbus A320', from:{code:'BER',time:'11:40'}, to:{code:'BRU',time:'13:05'}, duration:'1h 25m'},"Lunch in Brussels","Check‑in Airbnb at 3:00pm"],
   stay:"Airbnb — Rue du Couloir, Ixelles, Bruxelles 1050",
   tickets:["Brussels Airlines Conf #8XZSJV"],
-  planned:[], suggested:[
-    {t:"Grand Place at night", d:"The UNESCO‑listed square is quieter and beautifully lit after dark — worth an evening stroll once you're settled in."},
-    {t:"Delirium Café", d:"Famous bar in the city centre with 2,000+ beers on the menu — a fun first‑night stop."},
-    {t:"Brussels waffle", d:"Grab a hot 'gaufre de Bruxelles' while wandering after lunch."}
+  planned:["Grand Place — sunset/night visit","Manneken Pis","Mont des Arts / Royal Palace — nice for an early morning walk, plus a few sites nearby","Marolles Flea Market — likely a Sunday‑only market","Eat: Cantillon Brewery","Eat: Maison Dandy — waffles","Eat: Mary — chocolate"],
+  suggested:[
+    {t:"Delirium Café", d:"Famous bar in the city centre with 2,000+ beers on the menu — a fun first‑night stop."}
   ]},
 
 {day:"Tuesday", date:"July 28", city:"Brussels", start:"Brussels", end:"Brussels",
@@ -689,7 +705,7 @@ const days = [
   ]},
 
 {day:"Thursday", date:"July 30", city:"Amsterdam", start:"Brussels", end:"Amsterdam",
-  activities:["Checkout Airbnb at 11:00am",{type:'train', code:null, airline:'Direct train', op:'Trainline · PNR CNNWGFM', from:{code:'Bruxelles‑Midi',time:'11:49'}, to:{code:'Amsterdam Zuid',time:'13:54'}, duration:'2h 5m'},"Check‑in Hotel at 15:00"],
+  activities:["Checkout Airbnb at 11:00am",{type:'train', code:null, airline:'Direct train', op:'Trainline · PNR CNNWGFM', from:{code:'Bruxelles‑Midi',time:'11:49'}, to:{code:'Amsterdam Zuid',time:'13:54'}, duration:'2h 5m'},"Check‑in Hotel at 15:00","20:00 — Poof Doof Party @ Soho House (invite from Tomi)"],
   stay:"NYX Hotel Amsterdam Rembrandt Square — Amstel 144, Amsterdam 1017 AE, Netherlands",
   tickets:["Trainline booking ref 964527071368", "PNR CNNWGFM"],
   planned:[], suggested:[
@@ -727,7 +743,7 @@ const days = [
   activities:[{type:'flight', code:'EJU7957', airline:'easyJet', op:'Airbus A320‑family', from:{code:'AMS',time:'13:30'}, to:{code:'NCE',time:'15:35'}, duration:'2h 5m'},"Pickup rental car @ Europcar (Conf #1201400369)","Drive to Antibes (35 mins)","Explore Antibes Old Town & Dinner"],
   stay:"Airbnb — 9 Avenue Mirabeau, Antibes, Provence‑Alpes‑Côte d'Azur 06600",
   tickets:["easyJet Booking Ref #KCH3FJ8", "Europcar Conf #1201400369"],
-  planned:["Aperitivo @ Bocca Mar"],
+  planned:[],
   suggested:[
     {t:"Musée Picasso Antibes", d:"If there's daylight left after check‑in, it's right in the Old Town and a nice low‑key first stop."},
     {t:"Ramparts sunset walk", d:"The seaside ramparts around the Old Town are lovely for golden hour before dinner."}
@@ -737,7 +753,7 @@ const days = [
   activities:["Coffee & Pastries","Belle Rives Beach Club — reservation @ 10:30am","Dinner at Le Fricot @ 7:30pm"],
   stay:"Airbnb — 9 Avenue Mirabeau, Antibes",
   tickets:["Belle Rives Beach Club"],
-  planned:["Early arvo/sunset beach club: Anao Plage in Beaulieu‑sur‑Mer","Morning market — Marché Provençal (7am–1pm)","Beach club — Yolo Plage in Juan‑les‑Pins","Dinner in Antibes Old Port"],
+  planned:[],
   suggested:[
     {t:"Fort Carré", d:"16th‑century star fort with panoramic coastal views, if anyone wants a short walk/activity between beach time."}
   ]},
@@ -868,6 +884,9 @@ function renderLeg(leg){
     : `<div class="tl-leg-point right"><b>—</b><span>${leg.to ? esc(leg.to.code) : ''}</span></div>`;
   const durationTag = leg.duration ? `<span class="tl-leg-duration">${esc(leg.duration)}</span>` : '';
   const note = leg.note ? `<div class="tl-leg-note">${esc(leg.note)}</div>` : '';
+  const trackLink = (leg.type === 'flight' && leg.code)
+    ? `<a class="tl-leg-track" href="https://www.flightaware.com/live/flight/${encodeURIComponent(leg.code)}" target="_blank" rel="noopener">${ICONS.radar}Track live</a>`
+    : '';
   return `<div class="tl-leg">
     <div class="tl-leg-badge">${icon}${codeLabel}${esc(leg.airline)} ${opLabel}</div>
     <div class="tl-leg-route">
@@ -876,6 +895,7 @@ function renderLeg(leg){
       ${toPoint}
     </div>
     ${note}
+    ${trackLink}
   </div>`;
 }
 
