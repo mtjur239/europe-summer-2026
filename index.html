@@ -72,6 +72,103 @@
     font-size:13.5px;
   }
 
+  /* ---------- Hero status (countdown / today / done) ---------- */
+  .hero-status{
+    max-width:720px;
+    margin:0 auto;
+    padding:20px 16px 4px;
+  }
+  .hero-card{
+    border-radius:14px;
+    box-shadow:var(--shadow);
+  }
+  .hero-card.countdown, .hero-card.done{
+    background:var(--card);
+    border:1px solid var(--line);
+    text-align:center;
+    padding:22px 20px;
+  }
+  .hero-card .eyebrow2{
+    font-size:11px;
+    letter-spacing:.2em;
+    text-transform:uppercase;
+    color:var(--accent-text);
+    font-weight:700;
+    margin-bottom:10px;
+  }
+  .hero-card .big-num{
+    font-size:44px;
+    font-weight:600;
+    line-height:1;
+    color:var(--ink);
+  }
+  .hero-card .big-num-label{
+    font-size:12px;
+    color:var(--muted);
+    margin-top:4px;
+    text-transform:uppercase;
+    letter-spacing:.06em;
+  }
+  .hero-card .sub-line{
+    font-size:13.5px;
+    color:var(--muted);
+    margin-top:12px;
+  }
+  .hero-card.today{
+    background:#eef5f0;
+    border:1px solid #cfe3d6;
+    text-align:left;
+    padding:20px 22px;
+  }
+  .hero-card.today .badge{
+    display:inline-block;
+    background:#3c6e56;
+    color:#fff;
+    font-size:10px;
+    font-weight:800;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+    padding:4px 9px;
+    border-radius:999px;
+    margin-bottom:12px;
+  }
+  .hero-card.today h3{ margin:0 0 3px; font-size:22px; font-weight:500; }
+  .hero-card.today .loc{ font-size:13px; color:#3d5c4c; margin-bottom:12px; }
+  .hero-card.today .highlight{ font-size:15.5px; color:#1c1c20; margin-bottom:14px; line-height:1.5; }
+  .hero-card.today .facts{ display:flex; gap:8px; flex-wrap:wrap; margin-bottom:16px; }
+  .hero-card.today .facts span{
+    font-size:11px;
+    background:#fff;
+    border:1px solid #cfe3d6;
+    border-radius:999px;
+    padding:4px 10px 4px 8px;
+    color:#2d5745;
+    display:inline-flex;
+    align-items:center;
+    gap:4px;
+    max-width:200px;
+    overflow:hidden;
+    white-space:nowrap;
+    text-overflow:ellipsis;
+  }
+  .hero-card.today .facts span svg{ width:11px; height:11px; flex-shrink:0; }
+  .hero-card .cta{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    background:#3c6e56;
+    color:#fff;
+    font-size:13px;
+    font-weight:700;
+    padding:9px 16px;
+    border-radius:9px;
+    border:none;
+    cursor:pointer;
+  }
+  .hero-card .cta:hover{ background:#2d5745; }
+  .hero-card.countdown .cta, .hero-card.done .cta{ background:var(--ink); margin-top:14px; }
+  .hero-card.countdown .cta:hover, .hero-card.done .cta:hover{ background:#000; }
+
   /* ---------- Destination picker ---------- */
   .picker{
     max-width:960px;
@@ -570,6 +667,8 @@
   <p class="sub">Tap a destination to jump there, or scroll day by day below.</p>
 </header>
 
+<div class="hero-status" id="heroStatus"></div>
+
 <div class="picker" id="picker"></div>
 
 <div class="action-panel" id="actionPanel"></div>
@@ -636,7 +735,7 @@ const ICONS = {
 };
 
 const days = [
-{day:"Thursday", date:"July 23", city:"Transit", start:"Sydney", end:"In Transit",
+{day:"Thursday", date:"July 23", city:"Transit", start:"Sydney", end:"In Transit", highlight:"Depart Sydney — VOZ1 to Doha, 2:50pm",
   activities:[{type:'flight', code:'VOZ1', airline:'Virgin Australia', op:'operated by Qatar Airways · Boeing 777-300ER', from:{code:'SYD',time:'2:50pm'}, to:{code:'DOH',time:'10:40pm'}, duration:'14h 50m'}],
   stay:"N/A",
   tickets:["Virgin Confirmation #FOVOTI", "Qatar Confirmation #F2DDK8"],
@@ -644,7 +743,7 @@ const days = [
     {t:"Doha connection is tight (~4 hrs overnight)", d:"Not enough time to leave the airport for a Souq Waqif run — grab food at DOH and rest before the 2:25am onward flight."}
   ]},
 
-{day:"Friday", date:"July 24", city:"Berlin", start:"In Transit", end:"Berlin",
+{day:"Friday", date:"July 24", city:"Berlin", start:"In Transit", end:"Berlin", highlight:"Arrive Berlin — VOZ6195 lands 7:25am",
   activities:[{type:'flight', code:'VOZ6195', airline:'Virgin Australia', op:'operated by Qatar Airways', from:{code:'DOH',time:'2:25am'}, to:{code:'BER',time:'7:25am'}, duration:'~6h'}],
   stay:"Airbnb — Hermannstraße 254, 12049 Berlin, Apartment 5 (see Guest Portal)",
   tickets:[],
@@ -653,7 +752,7 @@ const days = [
     {t:"Late supermarket run", d:"Stock the apartment with breakfast basics — most Berlin shops close Sundays."}
   ]},
 
-{day:"Saturday", date:"July 25", city:"Berlin", start:"Berlin", end:"Berlin",
+{day:"Saturday", date:"July 25", city:"Berlin", start:"Berlin", end:"Berlin", highlight:"CSD Berlin parade + Horse Meat Disco",
   activities:["Berlin Pride"],
   stay:"Airbnb — Hermannstraße 254, 12049 Berlin, Apartment 5",
   tickets:["Horse Meat Disco Berlin (starts 16:00)", "Gegen X Prncptl – CSD (starts 20:00)"],
@@ -663,7 +762,7 @@ const days = [
     {t:"Schwules Museum", d:"If you get a quiet window, this LGBTQ+ history museum in Schöneberg is a great cultural stop."}
   ]},
 
-{day:"Sunday", date:"July 26", city:"Berlin", start:"Berlin", end:"Berlin",
+{day:"Sunday", date:"July 26", city:"Berlin", start:"Berlin", end:"Berlin", highlight:"Berlin Pride wraps up — recovery day",
   activities:["Berlin Pride"],
   stay:"Airbnb — Hermannstraße 254, 12049 Berlin, Apartment 5",
   tickets:["Horse Meat Disco Berlin (ends 14:00)", "Gegen X Prncptl – CSD (ends 22:00)"],
@@ -673,7 +772,7 @@ const days = [
     {t:"Brandenburg Gate / East Side Gallery", d:"Worth a quick visit if you haven't already seen Berlin's landmarks between festivities."}
   ]},
 
-{day:"Monday", date:"July 27", city:"Brussels", start:"Berlin", end:"Brussels",
+{day:"Monday", date:"July 27", city:"Brussels", start:"Berlin", end:"Brussels", highlight:"Fly to Brussels — settle in & Grand Place",
   activities:["Checkout Airbnb at 9:30am","Uber to Berlin Airport (30 mins)",{type:'flight', code:'SN2582', airline:'Brussels Airlines', op:'Airbus A320', from:{code:'BER',time:'11:40'}, to:{code:'BRU',time:'13:05'}, duration:'1h 25m'},"Lunch in Brussels","Check‑in Airbnb at 3:00pm"],
   stay:"Airbnb — Rue du Couloir, Ixelles, Bruxelles 1050",
   tickets:["Brussels Airlines Conf #8XZSJV"],
@@ -682,7 +781,7 @@ const days = [
     {t:"Delirium Café", d:"Famous bar in the city centre with 2,000+ beers on the menu — a fun first‑night stop."}
   ]},
 
-{day:"Tuesday", date:"July 28", city:"Brussels", start:"Brussels", end:"Brussels",
+{day:"Tuesday", date:"July 28", city:"Brussels", start:"Brussels", end:"Brussels", highlight:"Free day in Brussels — Atomium, Manneken Pis",
   activities:[],
   stay:"Airbnb — Rue du Couloir, Ixelles, Bruxelles 1050",
   tickets:[],
@@ -693,7 +792,7 @@ const days = [
     {t:"Moules‑frites at Chez Léon", d:"Rue des Bouchers spot known for the classic Belgian mussels‑and‑fries dish."}
   ]},
 
-{day:"Wednesday", date:"July 29", city:"Brussels", start:"Brussels", end:"Brussels",
+{day:"Wednesday", date:"July 29", city:"Brussels", start:"Brussels", end:"Brussels", highlight:"Free day in Brussels — museums or a Bruges day trip",
   activities:[],
   stay:"Airbnb — Rue du Couloir, Ixelles, Bruxelles 1050",
   tickets:[],
@@ -704,7 +803,7 @@ const days = [
     {t:"Chocolate shopping in Sablon", d:"Belgium's chocolate district for gifts to bring home."}
   ]},
 
-{day:"Thursday", date:"July 30", city:"Amsterdam", start:"Brussels", end:"Amsterdam",
+{day:"Thursday", date:"July 30", city:"Amsterdam", start:"Brussels", end:"Amsterdam", highlight:"Train to Amsterdam + Poof Doof Party @ Soho House",
   activities:["Checkout Airbnb at 11:00am",{type:'train', code:null, airline:'Direct train', op:'Trainline · PNR CNNWGFM', from:{code:'Bruxelles‑Midi',time:'11:49'}, to:{code:'Amsterdam Zuid',time:'13:54'}, duration:'2h 5m'},"Check‑in Hotel at 15:00","20:00 — Poof Doof Party @ Soho House (invite from Tomi)"],
   stay:"NYX Hotel Amsterdam Rembrandt Square — Amstel 144, Amsterdam 1017 AE, Netherlands",
   tickets:["Trainline booking ref 964527071368", "PNR CNNWGFM"],
@@ -713,7 +812,7 @@ const days = [
     {t:"Albert Cuyp Market", d:"De Pijp street market for stroopwafels, herring and kibbeling — a good, cheap first taste of Amsterdam."}
   ]},
 
-{day:"Friday", date:"July 31", city:"Amsterdam", start:"Amsterdam", end:"Amsterdam",
+{day:"Friday", date:"July 31", city:"Amsterdam", start:"Amsterdam", end:"Amsterdam", highlight:"Convergence + World Pride Music Festival",
   activities:[],
   stay:"NYX Hotel Amsterdam Rembrandt Square",
   tickets:["Convergence (20:00–03:00)", "World Pride Music Festival 2026"],
@@ -722,7 +821,7 @@ const days = [
     {t:"Open Air Film Festival (Jul 28–31)", d:"Free queer cinema under the stars at Krugerpark, Mercatorplein and Gershwinplein — check the schedule for a screening that fits before Convergence."}
   ]},
 
-{day:"Saturday", date:"August 1", city:"Amsterdam", start:"Amsterdam", end:"Amsterdam",
+{day:"Saturday", date:"August 1", city:"Amsterdam", start:"Amsterdam", end:"Amsterdam", highlight:"Canal Parade (12:00–18:00) + FunHouse",
   activities:[],
   stay:"NYX Hotel Amsterdam Rembrandt Square",
   tickets:["Eliot's Boat Party (day time)", "World Pride Music Festival 2026", "FunHouse – World Pride Saturday Edition"],
@@ -730,7 +829,7 @@ const days = [
     {t:"Key event — Canal Parade, 12:00–18:00", d:"The signature WorldPride 2026 event: boats through the city centre, Oost and West canals. 500,000–750,000 spectators expected, so stake out a canal‑side spot early if you want to watch before Eliot's Boat Party."}
   ]},
 
-{day:"Sunday", date:"August 2", city:"Amsterdam", start:"Amsterdam", end:"Amsterdam",
+{day:"Sunday", date:"August 2", city:"Amsterdam", start:"Amsterdam", end:"Amsterdam", highlight:"Recovery & sleep day",
   activities:["Recovery & Sleep Day"],
   stay:"NYX Hotel Amsterdam Rembrandt Square",
   tickets:["World Pride Music Festival 2026"],
@@ -739,7 +838,7 @@ const days = [
     {t:"FEBO / late snacks", d:"If anyone's still up late, the automat walls serve cheap Dutch fast food any hour."}
   ]},
 
-{day:"Monday", date:"August 3", city:"Antibes", start:"Amsterdam", end:"Antibes",
+{day:"Monday", date:"August 3", city:"Antibes", start:"Amsterdam", end:"Antibes", highlight:"Fly to Nice, drive to Antibes — Old Town dinner",
   activities:[{type:'flight', code:'EJU7957', airline:'easyJet', op:'Airbus A320‑family', from:{code:'AMS',time:'13:30'}, to:{code:'NCE',time:'15:35'}, duration:'2h 5m'},"Pickup rental car @ Europcar (Conf #1201400369)","Drive to Antibes (35 mins)","Explore Antibes Old Town & Dinner"],
   stay:"Airbnb — 9 Avenue Mirabeau, Antibes, Provence‑Alpes‑Côte d'Azur 06600",
   tickets:["easyJet Booking Ref #KCH3FJ8", "Europcar Conf #1201400369"],
@@ -749,7 +848,7 @@ const days = [
     {t:"Ramparts sunset walk", d:"The seaside ramparts around the Old Town are lovely for golden hour before dinner."}
   ]},
 
-{day:"Tuesday", date:"August 4", city:"Antibes", start:"Antibes", end:"Antibes",
+{day:"Tuesday", date:"August 4", city:"Antibes", start:"Antibes", end:"Antibes", highlight:"Beach club day — Belle Rives",
   activities:["Coffee & Pastries","Belle Rives Beach Club — reservation @ 10:30am","Dinner at Le Fricot @ 7:30pm"],
   stay:"Airbnb — 9 Avenue Mirabeau, Antibes",
   tickets:["Belle Rives Beach Club"],
@@ -758,7 +857,7 @@ const days = [
     {t:"Fort Carré", d:"16th‑century star fort with panoramic coastal views, if anyone wants a short walk/activity between beach time."}
   ]},
 
-{day:"Wednesday", date:"August 5", city:"Antibes", start:"Antibes", end:"Cassis",
+{day:"Wednesday", date:"August 5", city:"Antibes", start:"Antibes", end:"Cassis", highlight:"Drive to Cassis via Billionaires Bay",
   activities:["Breakfast in Antibes Old Town","Explore Billionaires Bay Antibes","Checkout Airbnb at 10:00am","Drive to Cassis (2 hrs 15 min)"],
   stay:"Airbnb — 3 Avenue Alphonse Daudet, Cassis, Provence‑Alpes‑Côte d'Azur 13260",
   tickets:[],
@@ -766,7 +865,7 @@ const days = [
     {t:"Scenic coastal stop", d:"The drive along the Côte d'Azur has several viewpoints worth a quick photo stop if the schedule allows — no need to plan anything major on a travel day."}
   ]},
 
-{day:"Thursday", date:"August 6", city:"Cassis", start:"Cassis", end:"Cassis",
+{day:"Thursday", date:"August 6", city:"Cassis", start:"Cassis", end:"Cassis", highlight:"Free day in Cassis — Calanques",
   activities:[],
   stay:"Airbnb — 3 Avenue Alphonse Daudet, Cassis",
   tickets:[],
@@ -777,7 +876,7 @@ const days = [
     {t:"Port de Cassis stroll", d:"Colourful harbour, cafés and a small daily fish market."}
   ]},
 
-{day:"Friday", date:"August 7", city:"Cassis", start:"Cassis", end:"Cassis",
+{day:"Friday", date:"August 7", city:"Cassis", start:"Cassis", end:"Cassis", highlight:"L'Eden private boat charter of the Calanques",
   activities:["L'Eden Boat — private full‑day charter of the Calanques · Pickup 11:00am · Dropoff 4:00pm","Evening drinks","Dinner"],
   stay:"Airbnb — 3 Avenue Alphonse Daudet, Cassis",
   tickets:["L'Eden Boat Confirmation #901785726771"],
@@ -786,7 +885,7 @@ const days = [
     {t:"Dinner: La Canaille or Chez Gilbert", d:"La Canaille (port‑side, excellent seafood platters) or Chez Gilbert (famous bouillabaisse) both suit a celebratory last Cassis night. Villa Madie (2 Michelin stars) is the splurge option if anyone wants to book ahead."}
   ]},
 
-{day:"Saturday", date:"August 8", city:"Paris", start:"Cassis", end:"Paris",
+{day:"Saturday", date:"August 8", city:"Paris", start:"Cassis", end:"Paris", highlight:"Train to Paris — dinner in Le Marais",
   activities:["Return rental car at Marseille St Charles Railway Station",{type:'train', code:'TGV', airline:'SNCF TGV', op:'Ref #296F3P', from:{code:'Marseille St‑Charles',time:'12:03'}, to:{code:'Paris Gare de Lyon',time:'15:22'}, duration:'3h 19m'},"Check‑in Paris hotel at 16:00","Dinner in Le Marais"],
   stay:"Hôtel des Grands Voyageurs — 34 Rue de l'Abbé Grégoire, 75006 Paris, France",
   tickets:["Train: SNCF Ref #296F3P"],
@@ -795,7 +894,7 @@ const days = [
     {t:"Evening walk by the Seine", d:"Notre‑Dame and the Île de la Cité are a short walk from Le Marais if anyone wants a nightcap stroll."}
   ]},
 
-{day:"Sunday", date:"August 9", city:"Ho Chi Minh City", start:"Paris", end:"Ho Chi Minh",
+{day:"Sunday", date:"August 9", city:"Ho Chi Minh City", start:"Paris", end:"Ho Chi Minh", highlight:"Fly out — Paris to Ho Chi Minh City",
   activities:["Checkout hotel at 8:20am","Travel to CDG Airport (~1 hr)",{type:'flight', code:'VN10', airline:'Vietnam Airlines', op:'Airbus A350‑900', from:{code:'CDG',time:'11:35'}, to:{code:'SGN',time:null}, duration:'12h 15m', note:'Overnight flight — lands Day 19, 04:50 (+1)'}],
   stay:"N/A",
   tickets:["[merged] Delta Confirmation #F6V6NQ", "Vietnam Airlines #C22OON"],
@@ -803,7 +902,7 @@ const days = [
     {t:"Quick coffee before departure", d:"Only a short window this morning — a coffee and pastry near the hotel is plenty before heading to CDG."}
   ]},
 
-{day:"Monday", date:"August 10", city:"Ho Chi Minh City", start:"Ho Chi Minh", end:"In Transit",
+{day:"Monday", date:"August 10", city:"Ho Chi Minh City", start:"Ho Chi Minh", end:"In Transit", highlight:"16-hour Ho Chi Minh City layover",
   activities:[{type:'flight', code:'VN10', airline:'Vietnam Airlines', op:'Airbus A350‑900', from:{code:'CDG',time:null}, to:{code:'SGN',time:'04:50 (+1)'}, note:'Landed overnight from Paris'},"Explore Ho Chi Minh City (~16 hrs)",{type:'flight', code:'VN773', airline:'Vietnam Airlines', op:'Airbus A350‑900', from:{code:'SGN',time:'20:45'}, to:{code:'SYD',time:null}, duration:'8h 30m', note:'Overnight flight — lands Day 20, 08:15 (+1)'}],
   stay:"N/A",
   tickets:["[merged] Delta Confirmation #F6V6NQ", "Vietnam Airlines #C22OON"],
@@ -816,7 +915,7 @@ const days = [
     {t:"Use Grab for transport", d:"Grab (or Be/Xanh SM) is the easiest way to get around — airport to centre runs roughly VND 130,000–170,000."}
   ]},
 
-{day:"Tuesday", date:"August 11", city:"Sydney", start:"In Transit", end:"Sydney",
+{day:"Tuesday", date:"August 11", city:"Sydney", start:"In Transit", end:"Sydney", highlight:"Land in Sydney — welcome home",
   activities:[{type:'flight', code:'VN773', airline:'Vietnam Airlines', op:'Airbus A350‑900', from:{code:'SGN',time:null}, to:{code:'SYD',time:'08:15 (+1)'}, note:'Landed from Ho Chi Minh City — welcome home'}],
   stay:"N/A",
   tickets:[],
@@ -912,6 +1011,56 @@ const SEARCH_INDEX = days.map(d=>{
   return parts.join(' ').toLowerCase();
 });
 
+/* ---------- Today detection + hero status (countdown / today / done) ---------- */
+const todayIdx = days.findIndex(d => isSameDate(dayDateObj(d), new Date()));
+
+function renderHeroStatus(){
+  const el = document.getElementById('heroStatus');
+  const now = new Date();
+  const todayMidnight = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const startDate = dayDateObj(days[0]);
+  const oneDay = 24*60*60*1000;
+
+  if(todayIdx >= 0){
+    const d = days[todayIdx];
+    const hasFlight = d.activities.some(a=> typeof a==='object' && a.type==='flight');
+    const hasTrain = d.activities.some(a=> typeof a==='object' && a.type==='train');
+    let facts = '';
+    if(hasFlight) facts += `<span>${ICONS.plane}Flight today</span>`;
+    if(hasTrain) facts += `<span>${ICONS.train}Train today</span>`;
+    if(d.stay !== 'N/A') facts += `<span>${ICONS.bed}${esc(d.stay.split(' — ')[0])}</span>`;
+    if(d.tickets.length) facts += `<span>${ICONS.ticket}${d.tickets.length} booking${d.tickets.length>1?'s':''}</span>`;
+    el.innerHTML = `<div class="hero-card today">
+      <span class="badge">Today · Day ${todayIdx+1}</span>
+      <h3 class="serif">${esc(d.day)}, ${esc(d.date)}</h3>
+      <div class="loc">${esc(d.city)}</div>
+      <div class="highlight">${esc(d.highlight || '')}</div>
+      <div class="facts">${facts}</div>
+      <button class="cta" id="heroViewDay">View full day →</button>
+    </div>`;
+    document.getElementById('heroViewDay').addEventListener('click', ()=>{
+      const target = document.getElementById('day-' + (todayIdx+1));
+      if(target){ target.classList.add('open'); target.scrollIntoView({behavior:'smooth', block:'start'}); }
+    });
+  } else if(todayMidnight < startDate){
+    const diffDays = Math.round((startDate - todayMidnight) / oneDay);
+    el.innerHTML = `<div class="hero-card countdown">
+      <div class="eyebrow2">Countdown</div>
+      <div class="big-num serif">${diffDays}</div>
+      <div class="big-num-label">day${diffDays===1?'':'s'} to go</div>
+      <div class="sub-line">Trip begins ${esc(days[0].day)}, ${esc(days[0].date)} — departing ${esc(days[0].start)}</div>
+    </div>`;
+  } else {
+    const last = days[days.length-1];
+    el.innerHTML = `<div class="hero-card done">
+      <div class="eyebrow2">Trip complete</div>
+      <h3 class="serif" style="font-size:22px;margin:4px 0 0;">Welcome home</h3>
+      <div class="sub-line">You landed back in ${esc(last.end)} on ${esc(last.date)}.</div>
+    </div>`;
+  }
+}
+renderHeroStatus();
+
 /* ---------- Action items panel ---------- */
 const actionPanel = document.getElementById('actionPanel');
 if(ACTION_ITEMS.length){
@@ -961,7 +1110,6 @@ blocks.forEach(b=>{
 /* ---------- Day strip nav + collapse toggle ---------- */
 const dayStrip = document.getElementById('dayStrip');
 const chips = [];
-let todayIdx = days.findIndex(d => isSameDate(dayDateObj(d), new Date()));
 days.forEach((d,i)=>{
   const chip = document.createElement('button');
   chip.className = 'day-chip' + (i===todayIdx ? ' is-today' : '');
