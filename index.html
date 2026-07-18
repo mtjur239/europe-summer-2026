@@ -9,9 +9,10 @@
     --bg:#f6f4ef;
     --card:#ffffff;
     --ink:#1c1c20;
-    --muted:#847e73;
+    --muted:#6b6558;
     --line:#e6e1d6;
     --accent:#9c7a4f;
+    --accent-text:#7a5d39;
     --radius:14px;
     --shadow:0 1px 2px rgba(20,15,5,.04), 0 10px 28px rgba(20,15,5,.05);
     --shadow-hover:0 4px 10px rgba(20,15,5,.06), 0 16px 36px rgba(20,15,5,.08);
@@ -39,7 +40,7 @@
     font-size:11px;
     letter-spacing:.22em;
     text-transform:uppercase;
-    color:var(--accent);
+    color:var(--accent-text);
     font-weight:600;
     margin-bottom:14px;
   }
@@ -100,6 +101,55 @@
   .dest-card .info .name{ font-size:12.5px; font-weight:700; color:var(--ink); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
   .dest-card .info .range{ font-size:10.5px; color:var(--muted); margin-top:2px; letter-spacing:.02em; }
 
+  /* ---------- Action items panel ---------- */
+  .action-panel{
+    max-width:720px;
+    margin:0 auto 22px;
+    padding:0 16px;
+  }
+  .action-box{
+    background:#fdf6ea;
+    border:1px solid #ecd9ad;
+    border-radius:12px;
+    padding:13px 16px;
+  }
+  .action-box h4{
+    margin:0 0 8px;
+    font-size:11px;
+    text-transform:uppercase;
+    letter-spacing:.1em;
+    color:#8a6a1f;
+    font-weight:700;
+    display:flex;
+    align-items:center;
+    gap:6px;
+  }
+  .action-box h4 svg{ width:14px; height:14px; }
+  .action-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:10px;
+    font-size:13.5px;
+    padding:6px 0;
+    border-top:1px solid #f1e2ba;
+  }
+  .action-row:first-of-type{ border-top:none; }
+  .action-row .label{ color:#3d3220; }
+  .action-row .when{ color:#8a6a1f; font-size:11.5px; white-space:nowrap; }
+  .action-row button{
+    flex-shrink:0;
+    border:1px solid #d9bd7a;
+    background:#fff;
+    color:#8a6a1f;
+    font-size:11.5px;
+    font-weight:700;
+    padding:4px 10px;
+    border-radius:7px;
+    cursor:pointer;
+  }
+  .action-row button:hover{ background:#fdf1d8; }
+
   /* ---------- Sticky controls ---------- */
   .controls-wrap{
     position:sticky;
@@ -119,8 +169,45 @@
     width:5%;
     transition:width .25s ease;
   }
+  .search-row{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    padding:8px 12px 0;
+  }
+  .search-row input{
+    flex:1;
+    min-width:0;
+    border:1px solid var(--line);
+    background:#fff;
+    border-radius:8px;
+    padding:7px 10px;
+    font-size:13px;
+    color:var(--ink);
+    font-family:inherit;
+  }
+  .search-row input:focus{ outline:none; border-color:var(--accent); }
+  .search-count{
+    font-size:11px;
+    color:var(--muted);
+    white-space:nowrap;
+    flex-shrink:0;
+  }
+  .nav-btn.today-btn, .nav-btn.toggle-all{
+    flex-shrink:0;
+    border:1px solid var(--line);
+    background:#fff;
+    padding:7px 12px;
+    border-radius:8px;
+    font-size:12px;
+    font-weight:600;
+    color:var(--ink);
+    cursor:pointer;
+    white-space:nowrap;
+  }
+  .nav-btn.today-btn:hover, .nav-btn.toggle-all:hover{ border-color:var(--accent); }
   .controls{
-    padding:9px 12px;
+    padding:8px 12px 9px;
     display:flex;
     align-items:center;
     gap:4px;
@@ -143,29 +230,30 @@
     cursor:pointer;
     text-align:center;
     min-width:54px;
+    position:relative;
     transition:.15s;
   }
-  .day-chip .tag{ font-size:8.5px; font-weight:700; color:var(--accent); text-transform:uppercase; letter-spacing:.08em; line-height:1.2; margin-bottom:2px; white-space:nowrap; }
+  .day-chip .tag{ font-size:8.5px; font-weight:700; color:var(--accent-text); text-transform:uppercase; letter-spacing:.08em; line-height:1.2; margin-bottom:2px; white-space:nowrap; }
   .day-chip .n{ font-size:13px; font-weight:700; color:var(--ink); line-height:1.1; white-space:nowrap; }
   .day-chip .w{ font-size:9px; color:var(--muted); text-transform:uppercase; letter-spacing:.04em; margin-top:1px; }
   .day-chip:hover{ border-color:var(--accent); }
   .day-chip.active{ background:var(--ink); border-color:var(--ink); }
   .day-chip.active .n, .day-chip.active .w{ color:#fff; }
   .day-chip.active .tag{ color:#d9c7a3; }
-  .nav-btn.toggle-all{
-    flex-shrink:0;
-    margin-left:8px;
-    border:1px solid var(--line);
-    background:#fff;
-    padding:7px 12px;
-    border-radius:9px;
-    font-size:12px;
-    font-weight:600;
-    color:var(--ink);
-    cursor:pointer;
-    white-space:nowrap;
+  .day-chip.is-today::after{
+    content:'TODAY';
+    position:absolute;
+    top:-7px;
+    right:-6px;
+    background:#3c6e56;
+    color:#fff;
+    font-size:7px;
+    font-weight:800;
+    letter-spacing:.04em;
+    padding:2px 4px;
+    border-radius:5px;
   }
-  .nav-btn.toggle-all:hover{ border-color:var(--accent); }
+  .day-chip.hidden-match{ display:none; }
 
   main{
     max-width:720px;
@@ -196,9 +284,10 @@
     border:1px solid var(--line);
     margin-bottom:14px;
     overflow:hidden;
-    scroll-margin-top:96px;
+    scroll-margin-top:140px;
     transition:box-shadow .2s;
   }
+  .day-card.hidden-match{ display:none; }
   .day-card:hover{ box-shadow:var(--shadow-hover); }
   .banner{
     width:100%;
@@ -227,6 +316,19 @@
     border-radius:999px;
     backdrop-filter:blur(2px);
   }
+  .banner .today-flag{
+    position:absolute;
+    right:14px;
+    top:12px;
+    font-size:10px;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+    font-weight:800;
+    color:#fff;
+    background:#3c6e56;
+    padding:4px 9px;
+    border-radius:999px;
+  }
   .day-head{
     padding:14px 20px 16px;
     cursor:pointer;
@@ -241,12 +343,24 @@
     font-weight:500;
   }
   .day-title .d2{font-size:12.5px; color:var(--muted); margin-top:3px;}
+  .preview-icons{ display:flex; gap:6px; margin-top:7px; align-items:center; }
+  .preview-icons .pi{
+    display:inline-flex;
+    align-items:center;
+    gap:3px;
+    font-size:10.5px;
+    color:var(--muted);
+    background:#f4f2ec;
+    border-radius:999px;
+    padding:2px 7px 2px 5px;
+  }
+  .preview-icons .pi svg{ width:11px; height:11px; color:var(--accent-text); }
+  .head-right{ display:flex; align-items:center; gap:10px; flex-shrink:0; }
   .chevron{
     font-size:12px;
     color:var(--muted);
     transition:transform .2s;
     flex-shrink:0;
-    margin-bottom:3px;
   }
   .day-card.open .chevron{transform:rotate(180deg);}
   .day-body{
@@ -269,13 +383,13 @@
     font-size:10.5px;
     text-transform:uppercase;
     letter-spacing:.12em;
-    color:var(--accent);
+    color:var(--accent-text);
     font-weight:700;
     display:flex;
     align-items:center;
     gap:6px;
   }
-  .section h4 svg{ width:14px; height:14px; color:var(--accent); flex-shrink:0; }
+  .section h4 svg{ width:14px; height:14px; color:var(--accent-text); flex-shrink:0; }
   .section p, .section li{
     font-size:14px;
     line-height:1.6;
@@ -283,7 +397,30 @@
     color:#33322e;
   }
   ul.plain{margin:0; padding-left:18px;}
-  ul.plain li{margin-bottom:5px;}
+  ul.plain li{margin-bottom:5px; display:flex; align-items:center; justify-content:space-between; gap:8px; padding-left:0; list-style:none; margin-left:-18px; padding-left:18px;}
+  .ticket-text{ flex:1; }
+  .copy-btn{
+    flex-shrink:0;
+    border:1px solid var(--line);
+    background:#fff;
+    border-radius:6px;
+    width:24px; height:24px;
+    display:inline-flex; align-items:center; justify-content:center;
+    cursor:pointer;
+    color:var(--muted);
+  }
+  .copy-btn svg{ width:13px; height:13px; }
+  .copy-btn:hover{ border-color:var(--accent); color:var(--accent-text); }
+  .copy-btn.copied{ border-color:#3c6e56; color:#3c6e56; }
+
+  .stay-link{
+    color:var(--ink);
+    text-decoration:underline;
+    text-decoration-color:var(--line);
+    text-underline-offset:3px;
+  }
+  .stay-link:hover{ text-decoration-color:var(--accent); }
+  .stay-link .ext{ display:inline-block; width:11px; height:11px; margin-left:3px; vertical-align:-1px; color:var(--muted); }
 
   /* ---------- Schedule timeline ---------- */
   .timeline{ position:relative; padding-left:20px; }
@@ -340,7 +477,7 @@
     margin-bottom:9px;
     letter-spacing:.01em;
   }
-  .tl-leg-badge svg{ width:14px; height:14px; color:var(--accent); flex-shrink:0; }
+  .tl-leg-badge svg{ width:14px; height:14px; color:var(--accent-text); flex-shrink:0; }
   .tl-leg-badge .op{ color:var(--muted); font-weight:500; }
   .tl-leg-route{
     display:flex;
@@ -370,7 +507,6 @@
     white-space:nowrap;
   }
   .tl-leg-note{ font-size:12px; color:var(--muted); margin-top:9px; font-style:italic; }
-  .tl-leg-aircraft{ font-size:11.5px; color:var(--muted); margin-top:8px; }
 
   .todo-item{
     display:flex;
@@ -404,6 +540,7 @@
     .dest-card{ flex-basis:112px; }
     .dest-card .art{ height:54px; }
     .banner{ height:70px; }
+    .search-row{ flex-wrap:wrap; }
   }
 </style>
 </head>
@@ -419,8 +556,15 @@
 
 <div class="picker" id="picker"></div>
 
+<div class="action-panel" id="actionPanel"></div>
+
 <div class="controls-wrap">
   <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+  <div class="search-row">
+    <input id="searchInput" type="text" placeholder="Search flights, hotels, confirmation numbers…">
+    <span class="search-count" id="searchCount"></span>
+    <button class="nav-btn today-btn" id="todayBtn">Today</button>
+  </div>
   <div class="controls">
     <div class="day-strip" id="dayStrip"></div>
     <button class="nav-btn toggle-all" id="toggleAllBtn">Collapse all</button>
@@ -467,7 +611,11 @@ const ICONS = {
   ticket: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v2a2 2 0 0 0 0 4v2a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-2a2 2 0 0 0 0-4Z"/><path d="M13 6v3M13 15v3"/></svg>`,
   pin: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s7-7.5 7-12a7 7 0 1 0-14 0c0 4.5 7 12 7 12Z"/><circle cx="12" cy="10" r="2.5"/></svg>`,
   plane: `<svg viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M21 16v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0V9l-8 5v2l8-2.5V19l-3 2v1.5l4.5-1.5 4.5 1.5V21l-3-2v-5.5Z"/></svg>`,
-  train: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="14" rx="4"/><path d="M5 12h14"/><circle cx="9" cy="16.5" r="0.6" fill="currentColor"/><circle cx="15" cy="16.5" r="0.6" fill="currentColor"/><path d="M8 21l-2 2M16 21l2 2"/></svg>`
+  train: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="14" rx="4"/><path d="M5 12h14"/><circle cx="9" cy="16.5" r="0.6" fill="currentColor"/><circle cx="15" cy="16.5" r="0.6" fill="currentColor"/><path d="M8 21l-2 2M16 21l2 2"/></svg>`,
+  copy: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v1"/></svg>`,
+  check: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>`,
+  alert: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4M12 17h.01"/><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/></svg>`,
+  ext: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><path d="M15 3h6v6"/><path d="M10 14 21 3"/></svg>`
 };
 
 const days = [
@@ -559,7 +707,7 @@ const days = [
   ]},
 
 {day:"Saturday", date:"August 1", city:"Amsterdam", start:"Amsterdam", end:"Amsterdam",
-  activities:["Dusan and Phillip to book Fun House"],
+  activities:[],
   stay:"NYX Hotel Amsterdam Rembrandt Square",
   tickets:["Eliot's Boat Party (day time)", "World Pride Music Festival 2026", "FunHouse – World Pride Saturday Edition"],
   planned:[], suggested:[
@@ -661,6 +809,11 @@ const days = [
   ]}
 ];
 
+/* Action items pulled out of the day-by-day schedule so they don't get lost */
+const ACTION_ITEMS = [
+  { dayIdx: 9, text: "Dusan and Phillip to book Fun House", when: "Amsterdam — Aug 1" }
+];
+
 function esc(s){
   const d=document.createElement('div');
   d.innerText=s;
@@ -670,6 +823,38 @@ function cityColor(c){ return CITY_COLORS[c] || "#9c7a4f"; }
 function cityArt(c){ return CITY_ART[c] || CITY_ART["Transit"]; }
 function shortDate(s){ return s.replace('January','Jan').replace('February','Feb').replace('March','Mar').replace('April','Apr').replace('May','May').replace('June','Jun').replace('July','Jul').replace('August','Aug').replace('September','Sep').replace('October','Oct').replace('November','Nov').replace('December','Dec'); }
 function weekdayAbbr(w){ return w.slice(0,3); }
+function mapsLink(addr){ return 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(addr); }
+
+const MONTH_MAP = {January:0,February:1,March:2,April:3,May:4,June:5,July:6,August:7,September:8,October:9,November:10,December:11};
+function dayDateObj(d){
+  const parts = d.date.split(' ');
+  return new Date(2026, MONTH_MAP[parts[0]], parseInt(parts[1],10));
+}
+function isSameDate(a,b){ return a.getFullYear()===b.getFullYear() && a.getMonth()===b.getMonth() && a.getDate()===b.getDate(); }
+
+function copyText(text, btn){
+  const done = ()=>{
+    btn.classList.add('copied');
+    btn.innerHTML = ICONS.check;
+    setTimeout(()=>{ btn.classList.remove('copied'); btn.innerHTML = ICONS.copy; }, 1300);
+  };
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(done).catch(()=>fallbackCopy(text, done));
+  } else {
+    fallbackCopy(text, done);
+  }
+}
+function fallbackCopy(text, done){
+  const ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.position = 'fixed';
+  ta.style.opacity = '0';
+  document.body.appendChild(ta);
+  ta.select();
+  try{ document.execCommand('copy'); }catch(e){}
+  document.body.removeChild(ta);
+  done();
+}
 
 function renderLeg(leg){
   const icon = leg.type === 'train' ? ICONS.train : ICONS.plane;
@@ -694,6 +879,39 @@ function renderLeg(leg){
   </div>`;
 }
 
+function legText(leg){
+  return [leg.code, leg.airline, leg.op, leg.from&&leg.from.code, leg.to&&leg.to.code, leg.note].filter(Boolean).join(' ');
+}
+
+/* Build a lowercase search haystack per day, once */
+const SEARCH_INDEX = days.map(d=>{
+  const parts = [d.day, d.date, d.city, d.start, d.end, d.stay, d.tickets.join(' ')];
+  d.activities.forEach(a=> parts.push(typeof a === 'object' ? legText(a) : a));
+  parts.push((d.planned||[]).join(' '));
+  (d.suggested||[]).forEach(s=> parts.push(s.t + ' ' + s.d));
+  return parts.join(' ').toLowerCase();
+});
+
+/* ---------- Action items panel ---------- */
+const actionPanel = document.getElementById('actionPanel');
+if(ACTION_ITEMS.length){
+  let html = `<div class="action-box"><h4>${ICONS.alert}Needs Booking / Action</h4>`;
+  ACTION_ITEMS.forEach(item=>{
+    html += `<div class="action-row"><span class="label">${esc(item.text)}</span><span class="when">${esc(item.when)}</span><button data-day="${item.dayIdx}">View day</button></div>`;
+  });
+  html += `</div>`;
+  actionPanel.innerHTML = html;
+  actionPanel.querySelectorAll('button[data-day]').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      clearSearch();
+      const target = document.getElementById('day-' + (parseInt(btn.dataset.day,10)+1));
+      if(target){ target.classList.add('open'); target.scrollIntoView({behavior:'smooth', block:'start'}); }
+    });
+  });
+} else {
+  actionPanel.style.display = 'none';
+}
+
 /* ---------- Destination picker (grouped consecutive city blocks) ---------- */
 const blocks = [];
 days.forEach((d,i)=>{
@@ -710,6 +928,7 @@ blocks.forEach(b=>{
   card.className = 'dest-card';
   card.innerHTML = `<span class="art">${cityArt(b.city)}</span><div class="info"><div class="name">${esc(b.city)}</div><div class="range">${esc(range)}</div></div>`;
   card.addEventListener('click', ()=>{
+    clearSearch();
     const target = document.getElementById('day-' + (b.startIdx+1));
     if(target){
       target.classList.add('open');
@@ -722,13 +941,15 @@ blocks.forEach(b=>{
 /* ---------- Day strip nav + collapse toggle ---------- */
 const dayStrip = document.getElementById('dayStrip');
 const chips = [];
+let todayIdx = days.findIndex(d => isSameDate(dayDateObj(d), new Date()));
 days.forEach((d,i)=>{
   const chip = document.createElement('button');
-  chip.className = 'day-chip';
+  chip.className = 'day-chip' + (i===todayIdx ? ' is-today' : '');
   chip.dataset.idx = i;
   chip.innerHTML = `<div class="tag">Day ${i+1}</div><div class="n">${shortDate(d.date)}</div><div class="w">${weekdayAbbr(d.day)}</div>`;
   chip.title = d.day + ', ' + d.date + ' — ' + d.city;
   chip.addEventListener('click', ()=>{
+    clearSearch();
     const target = document.getElementById('day-' + (i+1));
     if(target){
       target.classList.add('open');
@@ -749,6 +970,16 @@ toggleAllBtn.addEventListener('click', ()=>{
   });
 });
 
+/* ---------- Today button ---------- */
+const todayBtn = document.getElementById('todayBtn');
+todayBtn.addEventListener('click', ()=>{
+  clearSearch();
+  let idx = todayIdx;
+  if(idx < 0){ idx = (new Date() < dayDateObj(days[0])) ? 0 : days.length - 1; }
+  const target = document.getElementById('day-' + (idx+1));
+  if(target){ target.classList.add('open'); target.scrollIntoView({behavior:'smooth', block:'start'}); }
+});
+
 /* ---------- Build day cards ---------- */
 const container = document.getElementById('days');
 days.forEach((d, idx)=>{
@@ -760,7 +991,18 @@ days.forEach((d, idx)=>{
 
   const banner = document.createElement('div');
   banner.className = 'banner';
-  banner.innerHTML = cityArt(d.city) + `<span class="daytag">Day ${idx+1} · ${esc(d.city)}</span>`;
+  banner.innerHTML = cityArt(d.city) + `<span class="daytag">Day ${idx+1} · ${esc(d.city)}</span>` + (idx===todayIdx ? `<span class="today-flag">Today</span>` : '');
+
+  const hasFlight = d.activities.some(a=> typeof a==='object' && a.type==='flight');
+  const hasTrain = d.activities.some(a=> typeof a==='object' && a.type==='train');
+  let previewHtml = '';
+  if(hasFlight || hasTrain || d.tickets.length){
+    previewHtml = '<div class="preview-icons">';
+    if(hasFlight) previewHtml += `<span class="pi">${ICONS.plane}Flight</span>`;
+    if(hasTrain) previewHtml += `<span class="pi">${ICONS.train}Train</span>`;
+    if(d.tickets.length) previewHtml += `<span class="pi">${ICONS.ticket}${d.tickets.length}</span>`;
+    previewHtml += '</div>';
+  }
 
   const head = document.createElement('div');
   head.className = 'day-head';
@@ -768,8 +1010,9 @@ days.forEach((d, idx)=>{
     <div class="day-title">
       <div class="d1 serif">${esc(d.day)}, ${esc(d.date)}</div>
       <div class="d2">${esc(d.start)} ${d.start!==d.end? '→ '+esc(d.end):''}</div>
+      ${previewHtml}
     </div>
-    <span class="chevron">▾</span>`;
+    <div class="head-right"><span class="chevron">▾</span></div>`;
   head.addEventListener('click', ()=> card.classList.toggle('open'));
 
   const body = document.createElement('div');
@@ -789,11 +1032,17 @@ days.forEach((d, idx)=>{
     html += `</div></div>`;
   }
 
-  html += `<div class="section"><h4>${ICONS.bed}Accommodation</h4><p>${esc(d.stay)}</p></div>`;
+  html += `<div class="section"><h4>${ICONS.bed}Accommodation</h4>`;
+  if(d.stay === 'N/A'){
+    html += `<p class="empty-hint">In transit — no accommodation tonight.</p>`;
+  } else {
+    html += `<p><a class="stay-link" href="${mapsLink(d.stay)}" target="_blank" rel="noopener">${esc(d.stay)}<span class="ext">${ICONS.ext}</span></a></p>`;
+  }
+  html += `</div>`;
 
   if(d.tickets.length){
     html += `<div class="section"><h4>${ICONS.ticket}Tickets &amp; Bookings</h4><ul class="plain">`;
-    d.tickets.forEach(t=> html += `<li>${esc(t)}</li>`);
+    d.tickets.forEach((t,ti)=> html += `<li><span class="ticket-text">${esc(t)}</span><button class="copy-btn" data-day="${idx}" data-ticket="${ti}" title="Copy">${ICONS.copy}</button></li>`);
     html += `</ul></div>`;
   }
 
@@ -820,6 +1069,47 @@ days.forEach((d, idx)=>{
   card.classList.add('open');
 });
 
+/* Delegated copy-button handler */
+container.addEventListener('click', (e)=>{
+  const btn = e.target.closest('.copy-btn');
+  if(!btn) return;
+  e.stopPropagation();
+  const di = parseInt(btn.dataset.day, 10);
+  const ti = parseInt(btn.dataset.ticket, 10);
+  const text = days[di].tickets[ti];
+  copyText(text, btn);
+});
+
+/* ---------- Search ---------- */
+const searchInput = document.getElementById('searchInput');
+const searchCount = document.getElementById('searchCount');
+function clearSearch(){
+  if(searchInput.value){
+    searchInput.value = '';
+    applySearch('');
+  }
+}
+function applySearch(rawQuery){
+  const query = rawQuery.trim().toLowerCase();
+  const cards = Array.from(document.querySelectorAll('.day-card'));
+  if(!query){
+    cards.forEach(c=> c.classList.remove('hidden-match'));
+    chips.forEach(c=> c.classList.remove('hidden-match'));
+    searchCount.textContent = '';
+    return;
+  }
+  let matchCount = 0;
+  cards.forEach((c,i)=>{
+    const idx = parseInt(c.dataset.idx,10);
+    const match = SEARCH_INDEX[idx].includes(query);
+    c.classList.toggle('hidden-match', !match);
+    chips[idx].classList.toggle('hidden-match', !match);
+    if(match){ matchCount++; c.classList.add('open'); }
+  });
+  searchCount.textContent = matchCount ? (matchCount + ' of ' + days.length + ' days match') : 'No matches';
+}
+searchInput.addEventListener('input', ()=> applySearch(searchInput.value));
+
 /* ---------- Scrollspy: highlight active day chip + progress bar ---------- */
 const progressFill = document.getElementById('progressFill');
 let currentActive = 0;
@@ -843,7 +1133,15 @@ const observer = new IntersectionObserver((entries)=>{
   });
 }, { rootMargin: '-15% 0px -70% 0px', threshold: 0 });
 cards.forEach(c=>observer.observe(c));
-setActive(0);
+
+/* On load: if trip is underway, land on today's card; otherwise start at Day 1 */
+if(todayIdx >= 0){
+  setActive(todayIdx);
+  const target = document.getElementById('day-' + (todayIdx+1));
+  if(target){ setTimeout(()=> target.scrollIntoView({behavior:'smooth', block:'start'}), 50); }
+} else {
+  setActive(0);
+}
 </script>
 </body>
 </html>
